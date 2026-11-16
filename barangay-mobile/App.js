@@ -5,7 +5,7 @@
 // NOTE: Barangay San Jose Main Hall lang — walang ibang branding.
 // ============================================================
 
-const LAPTOP_IP = '192.168.100.48'; // IP ng laptop mo sa Wi-Fi (palitan kapag nagbago)
+const LAPTOP_IP = '10.23.44.44'; // IP ng laptop mo sa Wi-Fi (palitan kapag nagbago)
 const BASE = `http://${LAPTOP_IP}:3001/api`;
 
 import React, { useState, useEffect, useRef } from 'react';

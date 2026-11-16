@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { requestAPI, statsAPI } from '../api';
+import Icon, { SERVICE_ICONS } from './Icons';
 
 // Kapareho ng SERVICES sa mobile app
 export const SERVICES = [
@@ -76,12 +77,12 @@ export default function Home({ user, setPage }) {
       {/* Stat cards */}
       <div className="mstat-row">
         <button className="mstat-card" onClick={() => setPage(isAdmin ? 'requests' : 'request')}>
-          <span className="mstat-icon">🧾</span>
+          <span className="mstat-icon"><Icon name="layers" size={24} color="#c2410c" /></span>
           <strong>{isAdmin ? (stats?.total_requests ?? 0) : SERVICES.length} services</strong>
           <small>{isAdmin ? 'Total requests' : 'View certificates'}</small>
         </button>
         <button className="mstat-card" onClick={() => setPage(isAdmin ? 'requests' : 'my-requests')}>
-          <span className="mstat-icon">✅</span>
+          <span className="mstat-icon"><Icon name="check-circle" size={24} color="#15803d" /></span>
           <strong>{isAdmin ? (stats?.pending ?? 0) : readyCount} {isAdmin ? 'pending' : 'ready'}</strong>
           <small>{isAdmin ? 'To process' : 'For pickup'}</small>
         </button>
@@ -98,13 +99,15 @@ export default function Home({ user, setPage }) {
 
       {popular.map((s) => (
         <button key={s.value} className="mservice" onClick={() => goRequest(s.value)}>
-          <span className="mservice-icon" style={{ background: s.iconBg }}>{s.icon}</span>
+          <span className="mservice-icon" style={{ background: s.iconBg }}>
+            <Icon name={SERVICE_ICONS[s.value]} size={24} color={s.iconColor} />
+          </span>
           <span className="mservice-body">
             <strong className="mservice-title">{s.label}</strong>
             <span className="mservice-desc">{s.desc}</span>
             <span className="mservice-meta">
               <span className="mservice-price" style={s.price === 'Free' ? { background: '#d9f2e4', color: '#15803d' } : {}}>{s.price}</span>
-              <span className="mservice-time">🕒 {s.time}</span>
+              <span className="mservice-time"><Icon name="clock" size={13} color="#64748b" /> {s.time}</span>
             </span>
           </span>
           <span className="mservice-chev">›</span>

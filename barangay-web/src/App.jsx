@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth, AuthProvider } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
+import MobileShell from './components/MobileShell';
+import Services from './components/Services';
+import useIsMobile from './useIsMobile';
 import sealImg from './assets/seal.png';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -18,6 +21,7 @@ import RequestStatus from './components/RequestStatus';
 
 function AppInner() {
   const { user, logout } = useAuth();
+  const isMobile = useIsMobile();
   const [page, setPage] = useState('home');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -41,6 +45,23 @@ function AppInner() {
   }
 
   const navigate = (p) => { setPage(p); setMobileNavOpen(false); };
+
+  // ==================== MOBILE (resident, ≤768px) ====================
+  // PWA design: orange header + bottom tabs, walang sidebar
+  if (isMobile && user && user.role === 'resident') {
+    return (
+      <MobileShell user={user} page={page} setPage={navigate}>
+        {page === 'home' && <Home user={user} setPage={navigate} />}
+        {page === 'services' && <Services setPage={navigate} />}
+        {page === 'dashboard' && <ResidentDashboard setPage={navigate} />}
+        {page === 'request' && <RequestForm setPage={navigate} />}
+        {page === 'my-requests' && <MyRequests setPage={navigate} />}
+        {page === 'profile' && <EditProfile setPage={navigate} />}
+        {page === 'chat' && <Chat setPage={navigate} user={user} />}
+        {page === 'status' && <RequestStatus setPage={navigate} />}
+      </MobileShell>
+    );
+  }
 
   return (
     <div className="app-layout">
@@ -69,6 +90,7 @@ function AppInner() {
         {user.role === 'resident' && (
           <>
             {page === 'dashboard' && <ResidentDashboard setPage={navigate} />}
+            {page === 'services' && <Services setPage={navigate} />}
             {page === 'request' && <RequestForm setPage={navigate} />}
             {page === 'my-requests' && <MyRequests setPage={navigate} />}
             {page === 'profile' && <EditProfile setPage={navigate} />}

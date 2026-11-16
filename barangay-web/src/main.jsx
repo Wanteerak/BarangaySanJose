@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import './sidebar.css';
+import './mobile.css';
 
 // PWA: register service worker (kung supported ng browser)
 if ('serviceWorker' in navigator) {

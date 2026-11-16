@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { profileAPI } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 export default function EditProfile({ setPage }) {
+  const { logout } = useAuth();
   const [profile, setProfile] = useState({
     full_name: '',
     email: '',
@@ -96,6 +98,10 @@ export default function EditProfile({ setPage }) {
           </button>
         </form>
       </div>
+
+      <button className="btn btn-outline mprofile-logout" onClick={logout} style={{ marginTop: '1rem', color: '#c2410c', borderColor: '#c2410c' }}>
+        🚪 Logout
+      </button>
     </div>
   );
 }

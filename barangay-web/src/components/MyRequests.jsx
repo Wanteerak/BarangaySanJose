@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { requestAPI } from '../api';
+import useIsMobile from '../useIsMobile';
+import Icon from './Icons';
 
 const TYPE_LABELS = {
   clearance: 'Barangay Clearance',
@@ -10,7 +12,96 @@ const TYPE_LABELS = {
   id: 'Barangay ID Application',
 };
 
+// Status labels para sa mobile badges
+const STATUS_LABELS = {
+  pending: 'For Review',
+  approved: 'Ready for Pickup',
+  released: 'Released',
+  rejected: 'Rejected',
+};
+
+function dateLabel(iso) {
+  const d = new Date(iso);
+  const today = new Date();
+  if (d.toDateString() === today.toDateString()) return 'Submitted Today';
+  return 'Submitted ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// ===== MOBILE: card layout =====
+function MobileRequests({ requests, setPage }) {
+  const hasReady = requests.some((r) => r.status === 'approved' || r.status === 'released');
+
+  return (
+    <div className="page">
+      {hasReady && (
+        <div className="mreminder">
+          <span className="mreminder-icon"><Icon name="check" size={22} color="#10b981" /></span>
+          <div>
+            <strong>Pickup reminder</strong>
+            <small>Bring your original ID and required payment.</small>
+          </div>
+        </div>
+      )}
+
+      <div className="msection-head">
+        <div>
+          <h2 className="msection-title">My requests</h2>
+          <p className="msection-sub">Private and visible only to you and authorized staff</p>
+        </div>
+      </div>
+
+      {requests.length === 0 && (
+        <div className="mnote">
+          <p>Wala ka pang request. I-tap ang <b>Apply</b> tab para mag-apply.</p>
+        </div>
+      )}
+
+      {requests.map((r) => (
+        <div className="mreq-card" key={r.id}>
+          <div className="mreq-top">
+            <span className="mreq-code">{r.request_code}</span>
+            <span className={`mreq-badge ${r.status}`}>{STATUS_LABELS[r.status] || r.status}</span>
+          </div>
+          <div className="mreq-title">{TYPE_LABELS[r.type] || r.type}</div>
+          <div className="mreq-date">{dateLabel(r.created_at)}</div>
+
+          {r.status === 'pending' && (
+            <div className="mreq-update">
+              <small>LATEST UPDATE</small>
+              <p>Your uploaded document and resident information are being checked by the information desk.</p>
+              <div className="mreq-live">Updates will appear here automatically</div>
+            </div>
+          )}
+
+          {r.status === 'approved' && (
+            <div className="mreq-update">
+              <small>LATEST UPDATE</small>
+              <p>Your document is ready for pickup at the Barangay San Jose Main Hall. Bring your original ID and the required payment.</p>
+              <div className="mreq-live">Claim it on your scheduled date</div>
+            </div>
+          )}
+
+          {r.status === 'released' && (
+            <div className="mreq-update">
+              <small>LATEST UPDATE</small>
+              <p>This document has been claimed and released. Thank you!</p>
+            </div>
+          )}
+
+          {r.status === 'rejected' && r.reject_reason && (
+            <div className="mreq-reason">
+              ✏️ <b>Dahilan:</b> {r.reject_reason}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ===== DESKTOP: table layout (walang binago) =====
 export default function MyRequests({ setPage }) {
+  const isMobile = useIsMobile();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,6 +115,8 @@ export default function MyRequests({ setPage }) {
   }, []);
 
   if (loading) return <div className="empty-state">Loading requests...</div>;
+
+  if (isMobile) return <MobileRequests requests={requests} setPage={setPage} />;
 
   return (
     <div className="page">

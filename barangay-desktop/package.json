@@ -13,7 +13,7 @@
     "appId": "com.barangaysanjose.desktop",
     "productName": "Barangay San Jose",
     "directories": {
-      "output": "release17"
+      "output": "release18"
     },
     "files": [
       "main.js",

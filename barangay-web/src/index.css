@@ -709,6 +709,9 @@ table tr:hover {
 .mservice-time {
   color: #64748b;
   font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .mservice-chev {

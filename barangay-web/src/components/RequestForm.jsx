@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { requestAPI } from '../api';
 import { SERVICES } from './Home';
+import Icon, { SERVICE_ICONS } from './Icons';
 
 const TYPES = SERVICES.map((s) => ({ value: s.value, label: s.label }));
 
@@ -141,6 +142,7 @@ export default function RequestForm({ setPage }) {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewData, setPreviewData] = useState(null);
+  const [submitted, setSubmitted] = useState(null);
 
   const photoInputRef = useRef(null);
   const reqInputRef = useRef(null);
@@ -339,7 +341,7 @@ export default function RequestForm({ setPage }) {
     try {
       const res = await requestAPI.submitRequest(previewData);
       if (res.data.success) {
-        setSuccess('Request submitted successfully! Your Request ID: ' + res.data.data.request_code + '. It is now pending approval.');
+        setSubmitted({ code: res.data.data.request_code, type: previewData.type });
         setForm({ type: '', purpose: '' });
         setApplicant({});
         setPrioritySel([]);
@@ -376,6 +378,30 @@ export default function RequestForm({ setPage }) {
 
   const typeLabel = (v) => (TYPES.find((t) => t.value === v)?.label || v);
   const selectedService = SERVICES.find((s) => s.value === form.type);
+
+  // ===== SUCCESS SCREEN (Request submitted) =====
+  if (submitted) {
+    return (
+      <div className="page">
+        <div className="msuccess">
+          <div className="msuccess-check"><Icon name="check" size={52} color="#10b981" strokeWidth={3} /></div>
+          <h2>Request submitted</h2>
+          <p>Your {typeLabel(submitted.type)} application is now queued for document review.</p>
+          <div className="msuccess-ref">
+            <small>REFERENCE NUMBER</small>
+            <strong>{submitted.code}</strong>
+            <span>Keep this number for tracking and pickup.</span>
+          </div>
+          <button
+            className="msuccess-track"
+            onClick={() => { setSubmitted(null); setPage('my-requests'); }}
+          >
+            Track my request
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (showPreview && previewData) {
     const cfg = getFormCfg(previewData.type);
@@ -464,13 +490,15 @@ export default function RequestForm({ setPage }) {
                   className="mservice"
                   onClick={() => setForm({ ...form, type: s.value })}
                 >
-                  <span className="mservice-icon" style={{ background: s.iconBg }}>{s.icon}</span>
+                  <span className="mservice-icon" style={{ background: s.iconBg }}>
+                    <Icon name={SERVICE_ICONS[s.value]} size={24} color={s.iconColor} />
+                  </span>
                   <span className="mservice-body">
                     <strong className="mservice-title">{s.label}</strong>
                     <span className="mservice-desc">{s.desc}</span>
                     <span className="mservice-meta">
                       <span className="mservice-price" style={s.price === 'Free' ? { background: '#d9f2e4', color: '#15803d' } : {}}>{s.price}</span>
-                      <span className="mservice-time">🕒 {s.time}</span>
+                      <span className="mservice-time"><Icon name="clock" size={13} color="#64748b" /> {s.time}</span>
                     </span>
                   </span>
                   <span className="mservice-chev">›</span>
@@ -483,16 +511,18 @@ export default function RequestForm({ setPage }) {
 
       {/* Selected service card + Change */}
       {form.type && selectedService && (
-        <div className="mservice mservice-active" style={{ marginBottom: '1rem' }}>
-          <span className="mservice-icon" style={{ background: selectedService.iconBg }}>{selectedService.icon}</span>
-          <span className="mservice-body">
-            <strong className="mservice-title">{selectedService.label}</strong>
-            <span className="mservice-meta">
+        <div className="msummary">
+          <span className="mservice-icon" style={{ background: selectedService.iconBg }}>
+            <Icon name={SERVICE_ICONS[selectedService.value]} size={24} color={selectedService.iconColor} />
+          </span>
+          <span className="msummary-body">
+            <strong>{selectedService.label}</strong>
+            <span className="msummary-meta">
               <span className="mservice-price" style={selectedService.price === 'Free' ? { background: '#d9f2e4', color: '#15803d' } : {}}>{selectedService.price}</span>
-              <span className="mservice-time">• {selectedService.time}</span>
+              <span>• {selectedService.time}</span>
             </span>
           </span>
-          <button type="button" className="mlink" onClick={() => setForm({ type: '', purpose: '' })} style={{ marginTop: '0.6rem' }}>
+          <button type="button" className="msummary-change" onClick={() => setForm({ type: '', purpose: '' })}>
             Change
           </button>
         </div>
@@ -550,21 +580,13 @@ export default function RequestForm({ setPage }) {
             {formCfg.priority && (
               <div className="form-group">
                 <label>Priority classification</label>
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <div className="mpriority-row">
                   {PRIORITY_OPTIONS.map((p) => (
                     <button
                       key={p}
                       type="button"
+                      className={`mpriority-chip ${prioritySel.includes(p) ? 'sel' : ''}`}
                       onClick={() => togglePriority(p)}
-                      style={{
-                        padding: '0.5rem 1.2rem',
-                        borderRadius: 10,
-                        border: '1px solid ' + (prioritySel.includes(p) ? '#ea580c' : '#ddd'),
-                        background: prioritySel.includes(p) ? '#fde8d7' : '#fff',
-                        color: prioritySel.includes(p) ? '#c2410c' : '#334155',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                      }}
                     >
                       {p}
                     </button>
@@ -576,11 +598,11 @@ export default function RequestForm({ setPage }) {
             {/* Proof of identity upload */}
             <div className="form-group">
               <label>Proof of identity *</label>
-              <div style={{ border: '2px dashed #f97316', borderRadius: 12, padding: '1rem', background: '#fff7f2', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <span style={{ width: 44, height: 44, borderRadius: 10, background: '#fde8d7', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>⬆️</span>
+              <div className="mupload" onClick={() => reqInputRef.current?.click()}>
+                <span className="mupload-icon"><Icon name="upload" size={24} color="#c2410c" /></span>
                 <div>
-                  <strong style={{ color: '#1e293b', fontSize: '0.9rem' }}>Upload valid ID or voter document</strong>
-                  <div style={{ color: '#64748b', fontSize: '0.78rem' }}>JPG, PNG, or PDF • Max 5 MB</div>
+                  <strong>Upload valid ID or voter document</strong>
+                  <small>JPG, PNG, or PDF • Max 5 MB</small>
                 </div>
               </div>
               <input
@@ -588,26 +610,25 @@ export default function RequestForm({ setPage }) {
                 type="file"
                 accept="image/*,application/pdf"
                 onChange={(e) => handleFile(e.target.files?.[0], setRequirement)}
-                style={{ marginTop: '0.5rem' }}
+                className="mfile-hidden"
               />
               {requirement && <p style={{ fontSize: '0.8rem', color: '#155724', marginTop: '0.3rem' }}>✔ Proof of identity uploaded</p>}
             </div>
 
             {/* Certification checkbox */}
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', background: '#fff', border: '1px solid #eee', borderRadius: 12, padding: '0.9rem', marginBottom: '1rem', cursor: 'pointer', fontWeight: 400 }}>
+            <label className="mcertify">
               <input
                 type="checkbox"
                 checked={certified}
                 onChange={(e) => setCertified(e.target.checked)}
-                style={{ marginTop: 3 }}
               />
-              <span style={{ fontSize: '0.85rem', color: '#334155', lineHeight: 1.4 }}>
+              <span>
                 I certify that the information provided is true and authorize Barangay San Jose to verify my resident record.
               </span>
             </label>
 
-            <button type="submit" className="btn btn-primary" disabled={loading || !certified} style={{ width: '100%', padding: '0.9rem', fontSize: '1rem', opacity: !certified ? 0.5 : 1 }}>
-              {loading ? 'Submitting...' : 'Review and Submit'}
+            <button type="submit" className="msubmit" disabled={loading || !certified}>
+              {loading ? 'Submitting...' : 'Submit request'}
             </button>
             <button
               type="button"

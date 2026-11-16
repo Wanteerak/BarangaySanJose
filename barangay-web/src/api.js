@@ -5,7 +5,12 @@
 // na kailangang baguhin ang mga components.
 // ============================================================
 
-const BASE = 'http://localhost:3001/api';
+// Kapag nasa browser (http/https): relative '/api' — dina-daanan ng
+// Vite proxy papuntang backend (port 3001), gumana kahit HTTPS.
+// Kapag Electron desktop (file://): diretso sa backend gamit ang LAN IP.
+const BASE = window.location.protocol === 'file:'
+  ? 'http://10.23.44.44:3001/api'
+  : '/api';
 const TOKEN_KEY = 'bsj_token';
 
 async function req(path, options = {}) {

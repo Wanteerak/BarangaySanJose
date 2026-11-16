@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../api';
+import useIsMobile from '../useIsMobile';
+import sealImg from '../assets/seal.png';
 
 export default function Register({ onSwitchToLogin }) {
   const { register } = useAuth();
+  const isMobile = useIsMobile();
   const [step, setStep] = useState(1); // 1 = details, 2 = OTP
   const [form, setForm] = useState({
     full_name: '',
@@ -84,13 +87,91 @@ export default function Register({ onSwitchToLogin }) {
     else setError((r.data && r.data.message) || 'Failed to resend OTP');
   };
 
+  // ============ MOBILE PWA DESIGN (≤768px) ============
+  if (isMobile) {
+    return (
+      <div className="mauth">
+        <div className="mauth-hero">
+          <img src={sealImg} alt="Barangay San Jose" className="mauth-seal" />
+          <h1>Barangay San Jose</h1>
+          <p>Resident Services</p>
+        </div>
+
+        <div className="mauth-toggle">
+          <button onClick={onSwitchToLogin}>Login</button>
+          <button className="on">Register</button>
+        </div>
+
+        <div className="mauth-card">
+          <h2>Create resident account</h2>
+          <p className="mauth-sub">Available to verified residents of Barangay San Jose.</p>
+
+          {error && <div className="flash-error">{error}</div>}
+          {success && <div className="flash-success">{success}</div>}
+
+          {step === 1 ? (
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Full name</label>
+                <input type="text" name="full_name" value={form.full_name} onChange={handleChange} placeholder="Juan Dela Cruz" required />
+              </div>
+              <div className="form-group">
+                <label>Email address</label>
+                <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="name@example.com" required />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="Enter password" required />
+              </div>
+              <div className="form-group">
+                <label>Complete address</label>
+                <input type="text" name="address" value={form.address} onChange={handleChange} placeholder="House no., street, purok" />
+              </div>
+              <div className="form-group">
+                <label>Government ID (Proof of Identity) *</label>
+                <input type="file" accept="image/*,application/pdf" onChange={handleFile} required />
+                {form.id_photo && <div style={{ fontSize: '0.8rem', color: '#155724', marginTop: 4 }}>✔ ID uploaded</div>}
+              </div>
+              <button type="submit" className="mauth-btn" disabled={loading}>
+                {loading ? 'Sending...' : 'Send verification code'}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleVerify}>
+              <p style={{ textAlign: 'center', color: '#64748b', fontSize: '0.9rem', marginBottom: '1rem' }}>
+                Na-send na ang 6-digit OTP sa <b>{pendingEmail}</b>. I-enter dito (valid sa 10 minuto).
+              </p>
+              <div className="form-group">
+                <label>OTP Code</label>
+                <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} maxLength={6} required style={{ letterSpacing: 6, textAlign: 'center', fontSize: '1.2rem' }} />
+              </div>
+              <button type="submit" className="mauth-btn" disabled={loading}>
+                {loading ? 'Verifying...' : 'Verify OTP'}
+              </button>
+              <button type="button" className="mauth-btn" style={{ background: '#fff', color: '#ea580c', border: '1px solid #f3e3d3', marginTop: 8 }} onClick={handleResend} disabled={loading}>
+                Resend OTP
+              </button>
+              <button type="button" className="mauth-btn" style={{ background: '#fff', color: '#ea580c', border: '1px solid #f3e3d3', marginTop: 8 }} onClick={() => { setStep(1); setOtp(''); setPendingEmail(''); }}>
+                Bumalik
+              </button>
+            </form>
+          )}
+
+          <div className="mauth-privacy">
+            Your resident details and document requests are private and visible only to you and authorized barangay personnel.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ============ DESKTOP (walang binago) ============
   return (
     <div className="app" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <div className="card" style={{ maxWidth: 450, width: '100%' }}>
         <h2 style={{ textAlign: 'center', color: '#ea580c', marginBottom: '1.5rem' }}>
           {step === 1 ? 'Create Account' : 'Verify Your Email'}
         </h2>
-
         {error && <div className="flash-error">{error}</div>}
         {success && <div className="flash-success">{success}</div>}
 

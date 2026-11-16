@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import sealImg from './assets/seal.png';
 
-const PORTAL_URL = 'http://localhost:5173';
-// Desktop installer (served from promo/public/download)
+// HTTPS tunnel — dito dapat pumunta ang phone para maka-install bilang PWA
+// (kapag nag-restart ng tunnel, magbabago ang URL — i-update dito)
+const PORTAL_URL = 'https://mountains-bosnia-experiences-headset.trycloudflare.com';
 const DESKTOP_URL = '/download/Barangay San Jose Setup 1.0.0.exe';
 
 function Navbar({ onNav }) {
@@ -52,7 +53,6 @@ function Hero() {
   );
 }
 
-// Totoong services ng Barangay San Jose — kapareho ng portal (6 serbisyo)
 const SERVICES = [
   { icon: '📋', title: 'Barangay Clearance', price: '₱50', time: '3–5 min processing', desc: 'For employment, school, loans, travel, passport, police/NBI, and other legal purposes. Certifies you as a good-standing resident of San Jose.' },
   { icon: '🧾', title: 'Certificate of Indigency', price: 'Free', time: '3–5 min processing', desc: 'For medical, financial, and educational assistance from government offices, hospitals, schools, and social welfare agencies.' },
@@ -90,8 +90,8 @@ function Services() {
 }
 
 const STEPS = [
-  { n: '1', title: 'Create an Account', desc: 'Register using your name, address, and purok. It takes less than 2 minutes.' },
-  { n: '2', title: 'Submit Your Request', desc: 'Choose the document you need, fill in your details, and upload a valid ID or voter document as proof of identity.' },
+  { n: '1', title: 'Create an Account', desc: 'Register using your name, address, and purok. Upload a valid ID as proof of identity. It takes less than 2 minutes.' },
+  { n: '2', title: 'Submit Your Request', desc: 'Choose the document you need, fill in your details, and submit — no paper forms.' },
   { n: '3', title: 'Track & Wait for Approval', desc: 'Watch your request move from Pending to Approved in My Requests. If something is missing, the administrator sends you the exact reason why.' },
   { n: '4', title: 'Pick Up Your Document', desc: 'Once approved, the office prints your certificate on official barangay format. Claim it at the Main Hall on your scheduled date.' },
 ];
@@ -147,13 +147,13 @@ function About() {
 }
 
 function DownloadApp() {
-  const apkUrl = 'http://192.168.100.48:5174/download/barangay-san-jose.apk';
+  const pwaUrl = PORTAL_URL;
   return (
     <section id="download" className="promo-section">
       <div className="promo-section-inner">
         <h2>Use It on Any Device</h2>
         <p className="promo-sub">
-          Ang system ay gagamitin sa website, mobile app (Android at iPhone),
+          Ang system ay gagamitin sa website, mobile app (Android at iPhone bilang PWA),
           at Windows desktop app — lahat nagtuturo sa iisang barangay database.
         </p>
         <div className="promo-download-grid">
@@ -165,22 +165,25 @@ function DownloadApp() {
           </div>
           <div className="promo-download-card">
             <div className="promo-download-icon">🤖</div>
-            <h3>Android App</h3>
+            <h3>Android (PWA)</h3>
             <p>
-              I-download ang APK (sideload). I-scan ang QR o i-click ang button.
-              Walang Expo Go — direktang install ang APK sa phone mo.
+              I-install bilang <b>Progressive Web App (PWA)</b> direkta sa Chrome —
+              parang tunay na app, walang APK download.
             </p>
-            <div className="promo-qr">
-              <img src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(apkUrl)}`} alt="Android APK QR Code" />
-            </div>
-            <a className="promo-btn promo-btn-primary" href={apkUrl} download>Download APK (Android)</a>
+            <ol className="promo-pwa-steps">
+              <li>Buksan ang portal sa <b>Chrome</b>: <a href={PORTAL_URL}>{PORTAL_URL}</a></li>
+              <li>I-tap ang <b>menu (⋮)</b> sa kanang sulok sa itaas.</li>
+              <li>Piliin ang <b>“Add to Home screen”</b> o <b>“Install app”</b>.</li>
+              <li>I-tap ang <b>Install</b> para kumpirmahin.</li>
+              <li>Lalabas na ang icon sa Home Screen mo — i-tap para buksan tulad ng app!</li>
+            </ol>
           </div>
           <div className="promo-download-card">
             <div className="promo-download-icon">🍎</div>
-            <h3>iPhone / iPad (iOS) — PWA</h3>
+            <h3>iPhone / iPad (iOS — PWA)</h3>
             <p>
-              Walang App Store download. I-install bilang <b>Progressive Web App (PWA)</b>
-              direkta sa Safari — parang tunay na app sa Home Screen mo.
+              I-install bilang <b>Progressive Web App (PWA)</b> direkta sa Safari —
+              parang tunay na app sa Home Screen mo.
             </p>
             <ol className="promo-pwa-steps">
               <li>Buksan ang portal sa <b>Safari</b>: <a href={PORTAL_URL}>{PORTAL_URL}</a></li>
@@ -202,7 +205,8 @@ function DownloadApp() {
           </div>
         </div>
         <p className="promo-sub" style={{ marginTop: '1.5rem', fontSize: '0.85rem' }}>
-          Paalala: dapat naka-same Wi-Fi ang phone at laptop, at tumatakbo ang backend (port 3001) para gumana ang app.
+          Paalala: dapat naka-same Wi-Fi ang phone at laptop (para sa local demo), at tumatakbo ang backend (port 3001) para gumana ang app.
+          Kapag na-deploy na sa cloud, gagana kahit saan.
         </p>
       </div>
     </section>
@@ -214,8 +218,9 @@ const FAQS = [
   { q: 'How long does approval take?', a: 'Most requests are reviewed by the barangay administrator within 1–3 working days. You will see the status update in the portal, and if your request is rejected, the exact reason is shown so you can fix and resubmit.' },
   { q: 'What do I need to submit?', a: 'A photocopy or photo of a valid government ID (or voter stub / COMELEC certification), uploaded during the application. Barangay ID renewals also need the front and back of your old ID.' },
   { q: 'Do I still need to visit the barangay hall?', a: 'Yes — once your document is approved, visit the Main Hall on your scheduled date to claim it and settle applicable fees. The office prints your certificate on official barangay format.' },
-  { q: 'Can I use my smartphone?', a: 'Yes! Android: i-download ang APK o gamitin ang Expo Go. iPhone/iPad: i-install bilang PWA (Add to Home Screen sa Safari) — parang tunay na app.' },
+  { q: 'Can I use my smartphone?', a: 'Yes! Android at iPhone: i-install bilang PWA (Add to Home Screen) — parang tunay na app, walang APK download.' },
   { q: 'How do I install on iPhone?', a: 'Buksan ang portal sa Safari → i-tap ang Share button → “Add to Home Screen” → Add. Lalabas na ang icon sa Home Screen mo.' },
+  { q: 'How do I install on Android?', a: 'Buksan ang portal sa Chrome → menu (⋮) → “Add to Home screen” o “Install app” → Install. Lalabas na ang icon sa Home Screen mo.' },
 ];
 
 function Faq() {

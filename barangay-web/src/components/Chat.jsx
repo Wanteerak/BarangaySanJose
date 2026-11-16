@@ -1,8 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { messageAPI, userAPI } from '../api';
+import useIsMobile from '../useIsMobile';
+import Icon from './Icons';
 
 export default function Chat({ setPage, user }) {
   const isAdmin = user.role === 'admin';
+  const isMobile = useIsMobile();
 
   const [partnerId, setPartnerId] = useState(isAdmin ? null : 1);
   const [partnerName, setPartnerName] = useState(isAdmin ? '' : 'Barangay Administrator');
@@ -98,6 +101,55 @@ export default function Chat({ setPage, user }) {
 
   // ---------- Resident view ----------
   if (!isAdmin) {
+    // ===== MOBILE CHAT (PWA design) =====
+    if (isMobile) {
+      return (
+        <div className="mchat">
+          <div className="mchat-head">
+            <div className="mchat-avatar"><Icon name="building" size={22} color="#c2410c" /></div>
+            <div className="mchat-head-info">
+              <strong>Barangay Administrator</strong>
+              <small>● Online</small>
+            </div>
+          </div>
+
+          <div className="mchat-messages">
+            {messages.map((m) => {
+              const sent = m.sender_id === user.user_id;
+              return (
+                <div key={m.id} className={`mchat-row ${sent ? 'me' : 'them'}`}>
+                  <div className={`mchat-bubble ${sent ? 'sent' : 'received'}`}>
+                    <div>{m.message}</div>
+                    <div className="mchat-time">{formatTime(m.created_at)}</div>
+                  </div>
+                </div>
+              );
+            })}
+            {messages.length === 0 && (
+              <div className="mchat-empty">
+                Walang messages pa. Simulan ang usapan!<br />
+                Halimbawa: “Ano ang requirements para sa Barangay Clearance?”
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="mchat-inputbar">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a message..."
+              onKeyPress={handleKey}
+            />
+            <button className="mchat-send" onClick={() => sendMessage()} aria-label="Send">
+              <Icon name="send" size={20} color="#fff" />
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="page">
         <button className="btn-back" onClick={() => setPage('dashboard')}>← Back</button>

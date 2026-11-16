@@ -78,9 +78,22 @@ C:\Users\Mico\Desktop\CaptoneSystem\
 cd barangay-mobile
 npm start
 ```
-- **Android:** i-download ang APK sa promo site (http://localhost:5174 → Download → Android App), o i-build via EAS (`eas build --platform android --profile preview`)
-- **iPhone/iPad (iOS) — PWA:** buksan ang portal sa Safari → Share → "Add to Home Screen" → Add (walang Expo Go)
-- ⚠️ Same Wi-Fi dapat ang phone at laptop (para sa dev mode)
+- **Android at iOS (PWA):** I-install bilang PWA direkta sa browser (walang APK download)
+  - Android (Chrome): Buksan ang portal → menu (⋮) → "Add to Home screen" / "Install app"
+  - iPhone/iPad (Safari): Buksan ang portal → Share → "Add to Home Screen" → Add
+- ⚠️ Same Wi-Fi dapat ang phone at laptop (para sa local dev mode)
+
+### 3.1 HTTPS Tunnel (para maka-install bilang PWA sa phone)
+Kailangan ng **HTTPS** ang browser para lumabas ang "Install app" — kaya may tunnel:
+```powershell
+# I-double click lang:
+START-TUNNEL.bat
+```
+- Lalabas sa console ang **HTTPS link** (hal. `https://xxxx.trycloudflare.com`)
+- I-type ang link sa browser ng phone → i-install bilang PWA (tingnan sa itaas)
+- ⚠️ **Palit-palit ang URL** tuwing i-restart ang tunnel — i-run muli ang `START-TUNNEL.bat` para makuha ang bagong link
+- Gumagana kahit **hindi same Wi-Fi** (internet-based ang tunnel)
+- Tumatakbo ang `START-TUNNEL.bat` **kasabay** ng `RUN-SYSTEM.bat`
 
 ### 4. Desktop App (opsyonal)
 - Naka-install na! Hanapin sa Start Menu: **Barangay San Jose**
@@ -141,7 +154,7 @@ npm start
 - **🖨️ Print Document** — official barangay document (Republic of the Philippines header,
   Main Hall, auto-generated legal text, signature blocks, request code) — auto window.print()
 
-**Mobile App:** kapareho ng web (Home, Services, Apply, Requests, Profile, Chat) + file upload + iOS PWA support (Add to Home Screen)
+**Mobile App:** kapareho ng web (Home, Services, Apply, Requests, Profile, Chat) + file upload + iOS/Android PWA support (Add to Home Screen)
 **Logo/Icon:** bilog na seal (inalis ang puting background), inilagay sa mobile, desktop, web, at promo
 **EAS Build:** @wanteerak/barangay-san-jose — Android APK (preview profile)
 **Desktop App:** pareho ng web app, naka-install na sa PC

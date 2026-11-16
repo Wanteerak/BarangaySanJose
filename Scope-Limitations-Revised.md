@@ -15,7 +15,7 @@ The following are the **LIMITATIONS** set by the project developers regarding fe
 4. **Walk-in Requests & Manual Encoding:** For residents who visit the barangay hall in person (walk-ins), administrative staff physically receive the request and manually encode the details into the web-based administrative portal to maintain centralized records.
 
 5. **Platform-Specific Limitations:**
-   - **Android:** Distributed as a sideloaded APK (no Google Play Store listing); installation requires enabling "Unknown sources" on the device.
+   - **Android:** Delivered as a Progressive Web App (PWA) via Chrome "Add to Home screen" / "Install app" (no APK sideload, no Play Store listing).
    - **iOS:** Delivered as a Progressive Web App (PWA) via Safari "Add to Home Screen" (no native App Store app); requires Safari and (for best experience) an HTTPS-deployed site.
    - **Desktop:** Windows .exe installer; requires the backend (port 3001) and MySQL to be running.
    - **Connectivity:** The system requires an internet/network connection to the barangay backend; offline-only operation is not supported.
