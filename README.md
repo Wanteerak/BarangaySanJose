@@ -1,161 +1,169 @@
-# Barangay Management Information System — Area 6
+# Barangay San Jose System — Capstone Project
 
-Barangay San Jose Annex Area 6 · Rodriguez, Rizal
+Buong system ng **Barangay San Jose — Main Hall**. Isang folder lang ito — i-open sa VS Code.
 
-A capstone system with four parts:
+## 📂 Saan nakalocate ang lahat
 
-| Folder | What it is | Stack |
-|---|---|---|
-| `MyApp/` | Backend REST API | C# / ASP.NET Core (.NET 9), DDD-style solution |
-| `barangay-admin/` | Admin dashboard (web) | React + Vite |
-| `barangay-mobile/` | Resident / user app | React Native (Expo SDK 54) |
-| `barangay-website/` | Promotional website + app download | Static HTML + CSS + vanilla JS |
-| `bmis/` | Original front-end prototype kept as reference | Static HTML + CSS + JS |
-
----
-
-## 1. Roles
-
-| Role | Can do |
-|---|---|
-| **Head Admin** | Everything: manage staff & accounts, update **and delete** complaints/emergencies/announcements, households, duty roster, About page. |
-| **Admin** (standard) | Update complaint status/response/comments and emergency status. **Cannot** delete complaints. No staff management. |
-| **Resident** (mobile user) | Sign up (needs approval), file complaints, request emergency rescue, read announcements & daily operations, manage own profile. |
-
-New sign-ups land in **Pending** and cannot log in until a head admin approves them
-(they see the submitted valid ID in the Accounts page).
-
----
-
-## 2. Backend — `MyApp/`
-
-Solution split into five projects:
+**Pangunahing folder:** `C:\Users\Mico\Desktop\CaptoneSystem`
 
 ```
-MyApp/
-├── MyApp.sln
-└── src/
-    ├── MyApp.Shared/          # enums, ApiResponse/PagedResult/SearchQuery, exceptions, constants
-    ├── MyApp.Domain/          # entities + IApplicationDbContext
-    ├── MyApp.Application/     # DTOs, services, guards, mapping, DI
-    ├── MyApp.Infrastructure/  # EF Core (MySQL), JWT, BCrypt, SHA-256 codes, MailKit, file storage
-    └── MyApp.API/             # controllers, middleware, Program.cs, appsettings
+C:\Users\Mico\Desktop\CaptoneSystem\
+│
+├── backend\               → SERVER (Node.js + Express + MySQL)
+│   ├── server.js            ← lahat ng API endpoints (login, requests, chat…)
+│   ├── schema.sql           ← database schema (users, requests, messages)
+│   ├── seed.js              ← demo accounts (npm run seed)
+│   └── package.json
+│
+├── barangay-web\          → WEB APP (React + Vite) — Resident & Admin portal
+│   └── src\
+│       ├── components\
+│       │   ├── Home.jsx          ← resident home + SERVICES list
+│       │   ├── RequestForm.jsx   ← forms per serbisyo (SERVICE_FORMS config)
+│       │   ├── MyRequests.jsx    ← tracking + reject reason display
+│       │   ├── AdminDashboard.jsx← admin home (m-design)
+│       │   ├── AdminRequests.jsx ← admin: detail view, reject, PRINT
+│       │   ├── PrintDocument.jsx ← official barangay document (auto-print PDF)
+│       │   └── Navbar.jsx, Login.jsx, Register.jsx, CheckStatus.jsx, LiveChat.jsx
+│       ├── api.js          ← kumokonekta sa backend (localhost:3001)
+│       └── index.css       ← lahat ng styles (m- design classes)
+│
+├── barangay-promo\        → PROMOTIONAL WEBSITE (ang bagong revsion)
+│   └── src\
+│       ├── App.jsx          ← BUONG promo site (ito ang i-edit mo)
+│       └── index.css        ← styles ng promo (promo- classes)
+│   └── public\download\     ← desktop installer para sa Download button
+│
+├── barangay-mobile\       → MOBILE APP (React Native + Expo) — Android/iOS
+│   └── App.js               ← buong mobile app (LAPTOP_IP naka-hardcode)
+│
+├── barangay-desktop\      → WINDOWS DESKTOP APP (.exe)
+│   ├── main.js              ← Electron wrapper ng web app
+│   ├── package.json         ← output dir: release10
+│   └── release10\           ← "Barangay San Jose Setup 1.0.0.exe" (installer)
+│
+├── RUN-SYSTEM.bat         → One-click launcher ng backend + web + promo
+├── backup-barangay_san_jose.sql → Safety backup ng database (buo, may data)
+└── README.md              → itong file na ito
 ```
 
-### First-time setup
+## 💻 Paano i-open sa VS Code
 
-```powershell
-# From the repository root
-powershell -ExecutionPolicy Bypass -File scripts/setup-backend.ps1
-```
+1. I-double-click ang folder na **CaptoneSystem** sa Desktop
+2. Sa loob, **i-right-click ang blangkong bahagi** → **Open with Code**
+   (o buksan ang VS Code → File → Open Folder → piliin ang `CaptoneSystem`)
 
-That creates the solution, adds the projects, installs the NuGet packages and builds.
-Then create/refresh the database and run:
+**Kung gusto mo lang i-edit ang PROMO WEBSITE:**
+- Buksan: `barangay-promo\src\App.jsx` (lahat ng laman nandoon)
+- Styles: `barangay-promo\src\index.css`
 
-```powershell
-cd MyApp
-dotnet ef database update --project src/MyApp.Infrastructure --startup-project src/MyApp.API
-cd src/MyApp.API
-dotnet run            # http://localhost:5080  (Swagger at /swagger)
-```
+**Kung gusto mo lang i-edit ang WEB APP (resident/admin):**
+- Components: `barangay-web\src\components\`
+- Styles: `barangay-web\src\index.css`
 
-The API also applies migrations and seeds baseline data automatically on startup.
+## 🚀 Paano i-run lahat
 
-### Default accounts (change after first login)
+### 1. I-on ang MySQL (XAMPP)
+- Buksan ang **XAMPP Control Panel** → click **Start** sa **MySQL**
 
-| Username | Password | Role |
-|---|---|---|
-| `headadmin` | `Admin@123` | Head Admin (Barangay Captain) |
-| `admin` | `Admin@123` | Admin (Secretary) |
+### 2. Double-click: `RUN-SYSTEM.bat`
+- Bubuksan ang **BACKEND** (port 3001)
+- Bubuksan ang **WEB APP** (port 5173)
+- Bubuksan ang **PROMO SITE** (port 5174)
+- Awtomatikong bubuksan ang browser
+- ⚠️ **Huwag isara** ang mga command window habang gumagamit
 
-### Configuration — `MyApp/src/MyApp.API/appsettings.json`
-
-| Key | Purpose |
-|---|---|
-| `ConnectionStrings:Default` | MySQL connection string (`root` / your password) |
-| `Jwt:Key` | Signing key — **change this** (32+ chars) |
-| `Email:SenderEmail` / `Email:Password` | Gmail SMTP via MailKit (app password) |
-| `Seed:*` | Baseline accounts and demo data on first run |
-| `Downloads:*` | APK / store links shown on the website |
-| `Cors:AllowedOrigins` | Leave empty for development (allows any origin) |
-
-Security notes: passwords use **BCrypt**, password-reset codes are random 6-digit
-values stored only as **SHA-256** hashes with expiry and attempt limits, and JWTs
-carry the user id, username, role and status.
-
----
-
-## 3. Admin desktop app — `barangay-admin/`
-
-React + Vite dashboard wrapped in **Electron**, so it runs as an installable
-Windows program (it still talks to the API over HTTP).
-
-```powershell
-cd barangay-admin
-npm install
-npm run electron:dev   # opens the desktop app window (close `npm run dev` first: same port)
-```
-
-To build the installer (`release/Barangay Admin Setup 1.0.0.exe`):
-
-```powershell
-npm run dist
-```
-
-Edit `src/config.js` for the API URL, barangay name and page size.
-(`npm run dev` still serves the plain browser version at http://localhost:5173.)
-
-Pages: Login, Signup, Forgot password, Dashboard, Staff, Accounts, Households,
-Complaints, Emergencies, Daily Operations, Duty Roster, Announcements, About, Profile.
-
-The **Dashboard** shows pending sign-ups, pending complaints, pending emergencies,
-total residents (per household) and total households, plus complaints stats
-(pending / ongoing / resolved / rejected), emergencies stats
-(pending / approved / process / declined) and the **personnel on duty** board
-(name, assigned duty, area, position).
-
-The **Complaints** page has a search bar (username, subject, location), a
-status-update action per row (status + response + assigned officer) and a
-comment thread for detailed responses. Delete buttons appear **only** for the
-head admin.
-
----
-
-## 4. Mobile app — `barangay-mobile/`
-
+### 3. Mobile App (opsyonal)
 ```powershell
 cd barangay-mobile
-npm install
-npx expo start
+npm start
 ```
+- **Android:** i-download ang APK sa promo site (http://localhost:5174 → Download → Android App), o i-build via EAS (`eas build --platform android --profile preview`)
+- **iPhone/iPad (iOS) — PWA:** buksan ang portal sa Safari → Share → "Add to Home Screen" → Add (walang Expo Go)
+- ⚠️ Same Wi-Fi dapat ang phone at laptop (para sa dev mode)
 
-Edit `src/config.js` for the API URL. On a physical phone use your PC's LAN IP
-(for example `http://192.168.1.10:5080/api`) instead of `localhost`.
+### 4. Desktop App (opsyonal)
+- Naka-install na! Hanapin sa Start Menu: **Barangay San Jose**
+- Kung gusto i-rebuild:
+  ```powershell
+  cd barangay-desktop
+  npm run build
+  # installer: release10\Barangay San Jose Setup 1.0.0.exe
+  ```
 
-Residents submit complaints (select a suggested type **or** type their own),
-request emergency rescue, and read community posts / announcements, daily
-operations, hotlines and About Us.
+## 🌐 Mga URL
 
----
+| Website | URL |
+|---|---|
+| **Promotional Website** | http://localhost:5174 |
+| **Web App (Login / Portal)** | http://localhost:5173 |
+| **Backend API** | http://localhost:3001/api |
 
-## 5. Promotional website — `barangay-website/`
+## 👤 Demo Accounts
 
-Open `index.html` (or right-click → *Open with Live Server*).
+| Role | Email | Password |
+|---|---|---|
+| **Admin** | admin@barangay.gov | admin123 |
+| Resident | juan@demo.com | 123456 |
+| Resident | maria@demo.com | maria123 |
 
-Edit `src/config.js` (`window.APP_CONFIG`) for the API URL, download links,
-version and contact details. The site pulls mission/vision, hotlines,
-organization chart, published announcements and live statistics from
-`/api/public/*`, and degrades gracefully when the API is offline.
+## 🗄️ Database (MySQL sa XAMPP, port 3306)
 
----
+- **Database name:** `barangay_san_jose`
+- **Tables:** `users`, `requests`, `messages`
+- **Schema file:** `backend\schema.sql`
+- **phpMyAdmin:** http://localhost/phpmyadmin (kailangan naka-Start ang Apache sa XAMPP)
+- **Safety backup:** `backup-barangay_san_jose.sql` (i-import ito kapag may problema)
 
-## 6. Shared conventions
+## ✅ Kung ano na ang nagawa (v2)
 
-- **One response envelope** everywhere: `{ success, message, data, errors }`.
-- **One list shape** everywhere: `{ items, page, pageSize, totalItems, totalPages, hasNext, hasPrevious }`.
-- **One search convention** everywhere: `?search=&status=&page=&pageSize=&sortBy=&sortDir=`
-  with a **search bar + Reset button** component reused on every list screen
-  (`SearchBar.jsx` in the admin app and mobile app, `createSearchBar()` on the website).
-- Enums are serialized as **strings** (e.g. `"Pending"`, `"HeadAdmin"`).
-- Uploaded images are returned as web-relative paths (`uploads/...`); combine them
-  with `fileBaseUrl` from each client's config.
+**Web App (Resident side):**
+- Login / Register / Profile edit
+- Home page na may orange design + stats + popular services
+- 6 services na may sariling form bawat isa (config-driven: SERVICE_FORMS)
+  - Barangay Clearance ₱50 — may Priority chips (Senior/PWD/Pregnant)
+  - Certificate of Indigency — Free
+  - Low Income Certificate (BIR) ₱50
+  - Guardianship Certificate ₱50
+  - Cohabitation Certificate ₱50
+  - Barangay ID — Free (New/Renew + voter oo/hindi flow)
+- Proof of identity upload (JPG/PNG/PDF, max 5MB)
+- Certification checkbox (required bago mag-submit)
+- Double-check preview bago mag-submit
+- My Requests tracking + **reject reason display** (kapag nag-reject ang admin)
+
+**Web App (Admin side):**
+- Dashboard na may stats (m-design)
+- **Manage Requests** — filter (All/Pending/Approved/Rejected/Released)
+- **Detail view** — lahat ng sagot ng resident + uploaded documents (images/PDF)
+- **Reject na may REQUIRED na dahilan (comment)** — nakikita ng resident
+- Approve → schedule release (date picker)
+- **🖨️ Print Document** — official barangay document (Republic of the Philippines header,
+  Main Hall, auto-generated legal text, signature blocks, request code) — auto window.print()
+
+**Mobile App:** kapareho ng web (Home, Services, Apply, Requests, Profile, Chat) + file upload + iOS PWA support (Add to Home Screen)
+**Logo/Icon:** bilog na seal (inalis ang puting background), inilagay sa mobile, desktop, web, at promo
+**EAS Build:** @wanteerak/barangay-san-jose — Android APK (preview profile)
+**Desktop App:** pareho ng web app, naka-install na sa PC
+**Promo Website:** revised — puro Barangay San Jose Main Hall, totoong 6 services na may presyo,
+  3 ways to use (Web / Mobile QR / Desktop .exe download), updated FAQs
+
+**Backend:** Express + MySQL — auth, requests (approve/reject/schedule), profile,
+  live chat, stats. Reject reason REQUIRED sa reject action.
+
+## 🆘 Mga Karaniwang Problema
+
+| Problema | Solusyon |
+|---|---|
+| Hindi gumagana ang login | Tumatakbo ba ang MySQL (XAMPP) at backend? |
+| "Cannot reach server" | Backend dapat naka-run (`RUN-SYSTEM.bat`) |
+| Mobile "Network error" | Tama ba ang `LAPTOP_IP` sa `barangay-mobile\App.js`? Same Wi-Fi ba? |
+| Hindi gumagana ang desktop app | Kailangan naka-ON ang backend + MySQL |
+| Port 5173/5174 in-use | Isara ang lumang node windows, i-run ulit |
+| Sira ang MySQL pagkatapos mag-restart ng PC | XAMPP Control Panel → MySQL → Start |
+
+## 🔜 Kung gusto i-deploy (online)
+
+- **Railway** o **TiDB Cloud** (libre) — para gumana kahit hindi same Wi-Fi
+- Balik mo lang ang "BASE" sa `barangay-web\src\api.js` at `barangay-mobile\App.js`
+  papunta sa public URL ng backend

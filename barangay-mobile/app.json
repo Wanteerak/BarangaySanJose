@@ -1,56 +1,41 @@
-﻿{
+{
   "expo": {
     "name": "Barangay San Jose",
-    "slug": "barangay-mobile",
+    "slug": "barangay-san-jose",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "barangaymobile",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#ea580c"
+    },
     "ios": {
+      "bundleIdentifier": "com.barangaysanjose.app",
       "supportsTablet": true,
-      "bundleIdentifier": "com.barangayarea6.mobile"
+      "infoPlist": {
+        "NSCameraUsageDescription": "Kailangan ang camera para kumuha ng larawan ng inyong valid ID.",
+        "NSPhotoLibraryUsageDescription": "Kailangan ang photo library para i-upload ang proof of identity."
+      }
     },
     "android": {
-      "package": "com.barangayarea6.mobile",
+      "package": "com.barangaysanjose.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ea580c"
       },
       "permissions": [
-        "android.permission.RECORD_AUDIO"
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA"
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": null
     },
-    "plugins": [
-      "./plugins/withCleartextTraffic",
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos so you can attach a valid ID or complaint image."
-        }
-      ],
-      "expo-status-bar",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/splash.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ],
-      "expo-font"
-    ],
     "extra": {
       "eas": {
-        "projectId": "f42a7924-18b4-435a-9fcc-0dc2fe19e8da"
+        "projectId": "5ab0c5ac-56ff-4ea4-b084-d57086cb436d"
       }
-    }
+    },
+    "owner": "wanteerak"
   }
 }

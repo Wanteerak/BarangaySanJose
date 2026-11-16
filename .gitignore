@@ -1,61 +1,41 @@
-# ------------------------------------------------------------------ .NET / C#
-bin/
-obj/
-*.user
-*.suo
-.vs/
-*.DotSettings.user
-[Tt]est[Rr]esult*/
-project.lock.json
-*.nupkg
-MyApp/**/Migrations/**/*.Designer.cs.bak
-
-# --------------------------------------------------------------- Node / Vite
+# Dependencies
 node_modules/
-dist/
-dist-electron/
-release/
-build/
-.vite/
-*.tsbuildinfo
-npm-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+**/node_modules/
 
-# ---------------------------------------------------------------- React Native / Expo
+# Build outputs
+dist/
+build/
+web-dist/
+release*/
+**/release*/
+*.exe
+*.apk
+*.ipa
+
+# Environment
+.env
+.env.local
+backend/.env
+
+# Expo
 .expo/
-.expo-shared/
-web-build/
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
-*.orig.*
-android/
-ios/
-!android/.gitkeep
-!ios/.gitkeep
 
-# ----------------------------------------------------------- Uploaded user files
-# Runtime uploads (valid IDs, photos, complaint images) must never be committed.
-MyApp/src/MyApp.API/wwwroot/uploads/*
-!MyApp/src/MyApp.API/wwwroot/uploads/.gitkeep
-
-# --------------------------------------------------------------- Env / secrets
-.env
-.env.*
-!.env.example
-*.local.json
-appsettings.Local.json
-appsettings.*.Local.json
-
-# ------------------------------------------------------------------------- OS
+# OS
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# ------------------------------------------------------------------- Editors
+# IDE
+.vscode/
 .idea/
-*.swp
-*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temp
+*.tmp

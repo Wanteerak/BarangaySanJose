@@ -1,0 +1,21 @@
+# Scope and Limitations (Revised)
+
+**KABARANGAY: An Integrated Barangay Management Information System for Online Processing of Barangay Document Request**
+
+**Principal purpose:** To develop **KABARANGAY: An Integrated Barangay Management Information System for Online Processing of Barangay Document Request** to improve administrative efficiency and streamline barangay service delivery at **Barangay San Jose (Main Hall), Rodriguez, Rizal**. By integrating resident profiling, online document requests, request monitoring, and document issuance management into one platform, the system aims to enhance transparency, reduce processing delays, and provide a unified digital platform for barangay officials, staff, and residents. The respondents of this study will include barangay officials, administrative staff, and local residents of Barangay San Jose (Main Hall), who will provide insights into the current challenges and expectations for barangay document request processing. Additionally, IT experts will serve as system validators to ensure the technical soundness of the proposed solution. The study will employ a quantitative descriptive research design. The data will be gathered from barangay administrative personnel and local residents of Barangay San Jose (Main Hall). Stratified sampling will be used for resident respondents, while purposive sampling will be employed for barangay personnel. A quantitative descriptive-developmental design will be utilized, with data gathered through a structured survey questionnaire based on the ISO/IEC 25010 standard to ensure the reliability and validity of the results. The system integrates several key features designed to streamline barangay document request handling through a multi-platform approach (web portal, mobile app — Android APK and iOS PWA — and desktop admin console). The data gathered will be analyzed by the researchers to identify relevant needs, concerns, and requirements that will serve as the basis for the development of KABARANGAY. A structured survey questionnaire will be used as the primary data-gathering instrument. The developed system will be evaluated using applicable software quality characteristics based on the ISO/IEC 25010.
+
+The following are the **LIMITATIONS** set by the project developers regarding features that were not implemented in the system:
+
+1. **Geographical Scope:** The system was exclusively developed and customized to meet the needs of **Barangay San Jose (Main Hall), Rodriguez, Rizal**, and may not be directly compatible with other barangays without additional customized modules.
+
+2. **No Online Payment Gateway:** The system does not cover advanced financial transactions or online payment gateways for barangay fees. Applicable fees (e.g., ₱50 for Barangay Clearance, Low Income Certificate, Guardianship Certificate, and Cohabitation Certificate) are settled manually at the barangay hall upon claiming. The system also does not include manual migration and encoding of historical legacy paper archives from previous operational years.
+
+3. **Physical Document Release:** The system operates as a digital management tool for logging, organizing, tracking, and printing (auto-formatted official document) requests; actual physical release, claiming, and final verification of documents remain the direct responsibility of barangay personnel at the Main Hall.
+
+4. **Walk-in Requests & Manual Encoding:** For residents who visit the barangay hall in person (walk-ins), administrative staff physically receive the request and manually encode the details into the web-based administrative portal to maintain centralized records.
+
+5. **Platform-Specific Limitations:**
+   - **Android:** Distributed as a sideloaded APK (no Google Play Store listing); installation requires enabling "Unknown sources" on the device.
+   - **iOS:** Delivered as a Progressive Web App (PWA) via Safari "Add to Home Screen" (no native App Store app); requires Safari and (for best experience) an HTTPS-deployed site.
+   - **Desktop:** Windows .exe installer; requires the backend (port 3001) and MySQL to be running.
+   - **Connectivity:** The system requires an internet/network connection to the barangay backend; offline-only operation is not supported.

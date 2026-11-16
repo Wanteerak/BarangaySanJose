@@ -1,0 +1,561 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #fff;
+  color: #1e293b;
+  line-height: 1.6;
+}
+
+/* ---------- Navbar ---------- */
+.promo-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.promo-nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.9rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.promo-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.promo-logo {
+  background: linear-gradient(135deg, #ea580c, #f97316);
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.promo-logo-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
+  display: inline-block;
+}
+
+.promo-links {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.promo-links a {
+  text-decoration: none;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: color 0.2s;
+}
+
+.promo-links a:hover {
+  color: #ea580c;
+}
+
+.promo-cta {
+  background: #ea580c;
+  color: #fff !important;
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(26, 95, 122, 0.35);
+}
+
+.promo-cta:hover {
+  background: #c2410c;
+}
+
+.promo-burger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #ea580c;
+}
+
+/* ---------- Hero ---------- */
+.promo-hero {
+  background: linear-gradient(135deg, #9a3412 0%, #ea580c 55%, #f97316 100%);
+  color: #fff;
+  padding: 5.5rem 1.2rem 6rem;
+}
+
+.promo-hero-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.promo-tagline {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 1.4rem;
+}
+
+.promo-hero h1 {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+}
+
+.promo-hero h1 em {
+  font-style: normal;
+  color: #7dd3fc;
+}
+
+.promo-hero p {
+  font-size: 1.08rem;
+  opacity: 0.92;
+  max-width: 620px;
+  margin: 0 auto 2rem;
+}
+
+.promo-hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.2rem;
+}
+
+.promo-btn {
+  text-decoration: none;
+  padding: 0.85rem 1.7rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.promo-btn:hover {
+  transform: translateY(-2px);
+}
+
+.promo-btn-primary {
+  background: #f97316;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.45);
+}
+
+.promo-btn-primary:hover {
+  background: #0f766e;
+}
+
+.promo-btn-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.promo-hero-badges {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 0.88rem;
+  opacity: 0.9;
+}
+
+/* ---------- Sections ---------- */
+.promo-section {
+  padding: 4.5rem 1.2rem;
+}
+
+.promo-section-alt {
+  background: #f1f5f9;
+}
+
+.promo-section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.promo-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #0f172a;
+  margin-bottom: 0.4rem;
+}
+
+.promo-sub {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 2.8rem;
+}
+
+/* ---------- Services grid ---------- */
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.4rem;
+}
+
+.promo-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.6rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.promo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.promo-card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Presyo + oras badge sa service cards */
+.promo-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.35rem 0 0.6rem;
+}
+
+.promo-card-price {
+  background: #ea580c;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+}
+
+.promo-card-time {
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.promo-download-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.promo-card h3 {
+  color: #ea580c;
+  margin-bottom: 0.4rem;
+  font-size: 1.08rem;
+}
+
+.promo-card p {
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+/* ---------- Steps ---------- */
+.promo-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.4rem;
+}
+
+.promo-step {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.6rem;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.promo-step-num {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 0.8rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ea580c, #f97316);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.promo-step h3 {
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+  color: #0f172a;
+}
+
+.promo-step p {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+/* ---------- About ---------- */
+.promo-about {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.promo-about h2 {
+  text-align: left;
+}
+
+.promo-about > div > p {
+  color: #475569;
+  margin-bottom: 1.2rem;
+}
+
+.promo-checklist {
+  list-style: none;
+}
+
+.promo-checklist li {
+  padding: 0.35rem 0;
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.promo-checklist li::before {
+  content: '✔ ';
+  color: #f97316;
+  font-weight: 800;
+}
+
+.promo-about-box {
+  background: linear-gradient(135deg, #9a3412, #ea580c);
+  color: #fff;
+  border-radius: 14px;
+  padding: 1.8rem;
+}
+
+.promo-about-box h3 {
+  margin-bottom: 0.6rem;
+}
+
+.promo-about-box p {
+  opacity: 0.92;
+  font-size: 0.95rem;
+}
+
+/* ---------- FAQ ---------- */
+.promo-faq {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.promo-faq-item {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  overflow: hidden;
+}
+
+.promo-faq-item button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 1rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: left;
+}
+
+.promo-faq-toggle {
+  color: #f97316;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.promo-faq-item p {
+  padding: 0 1.2rem 1rem;
+  color: #64748b;
+  font-size: 0.93rem;
+}
+
+/* ---------- Download ---------- */
+.promo-download-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.6rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.promo-download-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.6rem;
+  text-align: center;
+}
+
+.promo-qr {
+  background: #fff;
+  border: 1px dashed #fdba74;
+  border-radius: 12px;
+  padding: 0.8rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.promo-qr img {
+  width: 160px;
+  height: 160px;
+  display: block;
+}
+
+.promo-download-card h3 {
+  color: #ea580c;
+  margin-bottom: 0.4rem;
+}
+
+.promo-download-card p {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.promo-pwa-steps {
+  text-align: left;
+  padding-left: 1.2rem;
+  margin: 0.6rem 0;
+  color: #334155;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.promo-pwa-steps li { margin-bottom: 0.2rem; }
+.promo-pwa-steps a { color: #ea580c; font-weight: 700; }
+
+/* ---------- Footer ---------- */
+.promo-footer {
+  background: #0f172a;
+  color: #cbd5e1;
+  padding: 3rem 1.2rem 1.5rem;
+}
+
+.promo-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.promo-brand-light {
+  color: #fff;
+  margin-bottom: 0.6rem;
+}
+
+.promo-footer p {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.promo-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.promo-footer-links a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.promo-footer-links a:hover {
+  color: #7dd3fc;
+}
+
+.promo-copyright {
+  max-width: 1100px;
+  margin: 1.2rem auto 0;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  text-align: center;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .promo-about {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-about h2,
+  .promo-section h2 {
+    text-align: center;
+  }
+
+  .promo-burger {
+    display: block;
+  }
+
+  .promo-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #e2e8f0;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .promo-links.open {
+    display: flex;
+  }
+}

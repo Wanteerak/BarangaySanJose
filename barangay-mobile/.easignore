@@ -1,0 +1,12 @@
+# Exclude large/unnecessary folders from EAS upload
+node_modules/
+.expo/
+dist/
+web-dist/
+android/
+ios/
+*.log
+*.apk
+*.ipa
+.DS_Store
+Thumbs.db
